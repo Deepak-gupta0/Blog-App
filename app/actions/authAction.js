@@ -5,8 +5,12 @@ import { LoginSchema, RegisterSchema } from "@/lib/Schemas/UserSchema";
 import { User } from "@/models/UserModel";
 import { flattenError } from "zod";
 import { Session } from "@/models/SessionModel";
-import { CookieToSignCookie } from "@/lib/auth";
+import { CookieToSignCookie, getLoggedInUser } from "@/lib/auth";
 import { cookies } from "next/headers";
+import ImageKit from "imagekit";
+import { Profile } from "@/models/ProfileModel";
+
+
 
 export async function registerAction(_, { name, email, password }) {
   const { success, data, error } = RegisterSchema.safeParse({
@@ -64,7 +68,7 @@ export async function loginAction(_, formData) {
 
     cookieStore.set({
       name: "sid",
-      value: CookieToSignCookie(session.id),
+      value: await CookieToSignCookie(session.id),
       httpOnly: true,
       path: "/",
     });
@@ -74,5 +78,87 @@ export async function loginAction(_, formData) {
 
   } catch (error) {
     console.log(error);
+    return {error : {email : "Something went wrong"}}
   }
+}
+
+// export async function uploadProfileImage(_, image){
+//   if(!image){
+//     return {error : "Image not found in Action"}
+//   }
+
+//   const arrayBuffer = await image.arrayBuffer();
+//   const buffer = Buffer.from(arrayBuffer);
+
+//   const res = await imageKit.upload({
+//     file: buffer,
+//     fileName: image.name,
+//   });
+//   console.log(res)
+
+  // if(!res){
+  //   return {error : "Image not saved on Internet"}
+  // }
+  
+  // const user = await getLoggedInUser()
+
+  // if(!user){
+  //   console.log("user nahi mila")
+  //   return {error : "Login Please", status : 401}
+  // }
+
+  // const profilePic = await Profile.create({profileImg : res.url, userId : user.id})
+
+  // if(!profilePic){
+  //   console.log("profile nahi bani ")
+  // }
+  // console.log(profilePic)
+
+  // return {...res}
+
+  
+
+
+// }
+
+const imageKit = new ImageKit({
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+});
+export async function uploadProfileImage(file) {
+  try {
+    if (!file) throw new Error("No file provided");
+
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
+  const res = await imageKit.upload({
+    file: buffer,
+    fileName: file.name,
+  });
+
+  if(!res){
+    return {error : "Image not saved on Internet"}
+  }
+  
+  const user = await getLoggedInUser()
+
+  if(!user){
+    console.log("user nahi mila")
+    return {error : "Login Please", status : 401}
+  }
+
+  const profilePic = await Profile.create({profileImg : res.url, userId : user.id})
+
+  if(!profilePic){
+    console.log("profile nahi bani ")
+  }
+  console.log(profilePic)
+  console.log(res)
+  return {...res}
+  } catch (error) {
+    return {error : "Something went wrong"}
+  }
+  
 }

@@ -11,6 +11,8 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "crypto": "^1.0.1",
+    "imagekit": "^6.0.0",
+    "lucide-react": "^0.546.0",
     "mongoose": "^8.19.1",
     "next": "15.5.5",
     "react": "19.1.0",
