@@ -28,11 +28,9 @@ export async function registerAction(_, { name, email, password }) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const createUser = await User.create({ ...data, password: hashedPassword });
-    console.log(createUser);
 
     return { success: true };
   } catch (error) {
-    console.log(error);
     if (error?.code === 11000) {
       return { success: false, error: { email: "Email Already Exists" } };
     }
@@ -48,14 +46,12 @@ export async function loginAction(_, formData) {
   if (!success) {
     return { success: false, errors: z.flattenError(error).fieldErrors };
   }
-  console.log("sucess hua");
 
   await connectDB();
   try {
     const user = await User.findOne({ email });
 
     if (!user) {
-      console.log("user not found");
       return { success: false, error: { email: "User is not registered" } };
     }
 
@@ -64,6 +60,16 @@ export async function loginAction(_, formData) {
     if (!isValidPassword) {
       return { success: false, error: { password: "Invalid Password" } };
     }
+
+    const sessions = await Session.find({userId : user.id}).sort({createdAt : -1})
+
+    if(sessions.length > 1){
+      const oldSessions = sessions.slice(1) //return remove the first one in array
+      const oldSessionsId = oldSessions.map((s) => s._id) //return [{_id : ""}, {_id : ""},...]
+
+      await Session.deleteMany({_id : {$in : oldSessionsId}})
+    }
+    
     const session = await Session.create({ userId: user.id });
 
     cookieStore.set({
@@ -77,49 +83,10 @@ export async function loginAction(_, formData) {
 
 
   } catch (error) {
-    console.log(error);
     return {error : {email : "Something went wrong"}}
   }
 }
 
-// export async function uploadProfileImage(_, image){
-//   if(!image){
-//     return {error : "Image not found in Action"}
-//   }
-
-//   const arrayBuffer = await image.arrayBuffer();
-//   const buffer = Buffer.from(arrayBuffer);
-
-//   const res = await imageKit.upload({
-//     file: buffer,
-//     fileName: image.name,
-//   });
-//   console.log(res)
-
-  // if(!res){
-  //   return {error : "Image not saved on Internet"}
-  // }
-  
-  // const user = await getLoggedInUser()
-
-  // if(!user){
-  //   console.log("user nahi mila")
-  //   return {error : "Login Please", status : 401}
-  // }
-
-  // const profilePic = await Profile.create({profileImg : res.url, userId : user.id})
-
-  // if(!profilePic){
-  //   console.log("profile nahi bani ")
-  // }
-  // console.log(profilePic)
-
-  // return {...res}
-
-  
-
-
-// }
 
 const imageKit = new ImageKit({
   publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
@@ -145,17 +112,13 @@ export async function uploadProfileImage(file) {
   const user = await getLoggedInUser()
 
   if(!user){
-    console.log("user nahi mila")
     return {error : "Login Please", status : 401}
   }
 
   const profilePic = await Profile.create({profileImg : res.url, userId : user.id})
 
   if(!profilePic){
-    console.log("profile nahi bani ")
   }
-  console.log(profilePic)
-  console.log(res)
   return {...res}
   } catch (error) {
     return {error : "Something went wrong"}
