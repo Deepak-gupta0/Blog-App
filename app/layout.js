@@ -22,9 +22,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${nunitoSans.className} relative antialiased w-full`}
-      > <NavbarWrapper />
+        className={`${nunitoSans.className} relative antialiased`}
+      > <div className="relative bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-x-hidden">
+        {/* <NavbarWrapper /> */}
         {children}
+      </div>
       </body>
     </html>
   );

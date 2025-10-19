@@ -52,7 +52,7 @@ export default function Carousel() {
       </div>
 
       {/* crousel content */}
-        <div className="absolute px-4 z-30 flex md:flex-row flex-col  md:justify-between items-left  bottom-6 md:bottom-14 w-full  md:px-8">
+        <div className="absolute text-white px-4 z-30 flex md:flex-row flex-col  md:justify-between items-left  bottom-6 md:bottom-14 w-full  md:px-8">
           <div className="py-2  max-w-2/3 md:max-w-1/2 ">
           <h1 className="text-[12px] md:text-5xl font-bold">Exploring the Wonders of Hiking </h1>
           <p className="text-[8px] md:text-2xl text-gray-300 font-semibold">An iconic landmark this post unveils the secrets that this destination a travers paradise make your day beautiful.</p>
