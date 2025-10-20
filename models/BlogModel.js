@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
 export const Blog = mongoose.models.Blog || mongoose.model("Blog", {
-  tile : {
+  title : {
     type : String,
     required : true,
   },
-  content :  {
+  desc :  {
     type : String,
     required : true,
   },

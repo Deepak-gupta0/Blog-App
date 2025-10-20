@@ -118,6 +118,7 @@ export async function uploadProfileImage(file) {
   const profilePic = await Profile.create({profileImg : res.url, userId : user.id})
 
   if(!profilePic){
+    return 
   }
   return {...res}
   } catch (error) {

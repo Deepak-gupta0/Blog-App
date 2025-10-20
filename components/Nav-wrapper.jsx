@@ -6,7 +6,7 @@ import Navbar from "./Navbar";
 export default function NavbarWrapper() {
   const pathname = usePathname();
 
-  const authRoutes = ["/login", "/register"];
+  const authRoutes = ["/login", "/register", "/create-blog"];
   const hideNavbar = authRoutes.includes(pathname);
 
   if (hideNavbar) return null; // login/signup pe kuch mat dikha

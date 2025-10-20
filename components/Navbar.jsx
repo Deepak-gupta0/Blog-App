@@ -1,10 +1,11 @@
 "use client"
+import Link from 'next/link'
 import React, { useState } from 'react'
 export default function Navbar() {
   const [mobNav, setMobNav] = useState(false)
   return (
     <nav
-  className="glass-nav fixed left-0 right-0 top-0 z-10 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-gray-900/60 backdrop-blur md:left-6 md:right-6 md:top-6 md:rounded-2xl"
+  className="glass-nav fixed left-0 right-0 top-0 z-10 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-gray-900/60 backdrop-blur md:left-6 md:right-6 md:top-6 md:rounded-2xl md:max-w-screen"
 >
   <div className="glass-nav flex items-center justify-between px-5 py-2 md:py-3">
     <span
@@ -30,45 +31,59 @@ export default function Navbar() {
         <polyline points="7 7 17 7 17 17" />
       </svg>
     </span>
+
+    <span className="pointer-events-none relative left-0 top-[50%] z-10 text-xl md:text-4xl font-black  md:absolute md:left-[50%] md:-translate-x-[50%] md:-translate-y-[50%] text-white">
+      Horizon
+    </span>
+
     <div className="hidden items-center gap-2 md:flex">
       <a
         href="#"
         className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
       >
         <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
-          Products
+          Blogs
         </span>
         <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
       </a>
+      <Link
+        href="/create-blog"
+        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
+      >
+        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+          Create
+        </span>
+        <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
+      </Link>
+      <Link
+        href="/profile"
+        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
+      >
+        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+          Profile
+        </span>
+        <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
+      </Link>
       <a
         href="#"
         className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
       >
         <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
-          History
-        </span>
-        <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
-      </a>
-      <a
-        href="#"
-        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
-      >
-        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
-          Contact
+          Contact Us
         </span>
         <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
       </a>
     </div>
-    <span className="pointer-events-none relative left-0 top-[50%] z-10 text-xl md:text-4xl font-black text-white mix-blend-overlay md:absolute md:left-[50%] md:-translate-x-[50%] md:-translate-y-[50%]">
-      logo.
-    </span>
+
+    
     <div className="flex items-center gap-4">
-      <div className="hidden md:block">
-        <button className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95">
-          <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
-            Sign in
-          </span>
-          <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
+      <div className="text-white">
+        <button className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform  active:scale-95">
+          <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-md md:w-fit">
+            <input type="text" placeholder='Explore blogs...' className='outline-none text-white'/>
+            <button className=' text-sm bg-white text-black py-2 px-2'>Search</button>
+          </div>
+          <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity " />
         </button>
       </div>
       <button onClick={() => setMobNav(prev => !prev)} className="ml-2 block scale-100 text-xl md:text-3xl text-white/90 transition-all hover:scale-105 hover:text-white active:scale-95 md:hidden">
@@ -90,7 +105,7 @@ export default function Navbar() {
       </button>
     </div>
   </div>
-  <div hidden={!mobNav} className="block overflow-hidden backdrop-blur border-[1px] border-white/10 px-2 py-1 text-xs">
+  <div hidden={!mobNav} className="block overflow-hidden backdrop-blur border-[1px] border-white/10 px-2 py-2 text-xs">
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
         <a
@@ -111,6 +126,12 @@ export default function Navbar() {
         >
           Contact
         </a>
+      </div>
+
+      <div>
+        <button className='bg-red-600 px-2 py-1 text-white rounded-xs'>
+          Logout
+        </button>
       </div>
       
     </div>
