@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${nunitoSans.className} relative antialiased`}
       > <div className="relative bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-x-hidden">
-        <NavbarWrapper />
+        {/* <NavbarWrapper /> */}
         {children}
       </div>
       </body>

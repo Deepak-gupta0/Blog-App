@@ -78,13 +78,13 @@ export default function Navbar() {
     
     <div className="flex items-center gap-4">
       <div className="text-white">
-        <button className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform  active:scale-95">
+        <div className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform  active:scale-95">
           <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-md md:w-fit">
             <input type="text" placeholder='Explore blogs...' className='outline-none text-white'/>
             <button className=' text-sm bg-white text-black py-2 px-2'>Search</button>
           </div>
           <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity " />
-        </button>
+        </div>
       </div>
       <button onClick={() => setMobNav(prev => !prev)} className="ml-2 block scale-100 text-xl md:text-3xl text-white/90 transition-all hover:scale-105 hover:text-white active:scale-95 md:hidden">
         <svg

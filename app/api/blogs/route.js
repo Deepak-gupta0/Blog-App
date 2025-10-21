@@ -8,7 +8,6 @@ export async function POST(request){
     const {perPage, page} = await request.json()
     const tests = await Test.find().skip(perPage * (page -1)).limit(perPage) 
     const testCount = await Test.countDocuments();
-    console.log(tests)
     return Response.json({tests, testCount}, {
       status : 200
     })

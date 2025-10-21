@@ -13,7 +13,7 @@ import { Profile } from "@/models/ProfileModel";
 
 
 export async function registerAction(_, { name, email, password }) {
-  const { success, data, error } = RegisterSchema.safeParse({
+  const { success, shortName, error } = RegisterSchema.safeParse({
     name,
     email,
     password,
@@ -27,7 +27,7 @@ export async function registerAction(_, { name, email, password }) {
     await connectDB();
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const createUser = await User.create({ ...data, password: hashedPassword });
+    const createUser = await User.create({ ...shortName, password: hashedPassword });
 
     return { success: true };
   } catch (error) {
@@ -38,9 +38,9 @@ export async function registerAction(_, { name, email, password }) {
   }
 }
 
-export async function loginAction(_, formData) {
+export async function loginAction(_, formshortName) {
   const cookieStore = await cookies();
-  const { success, data, error } = LoginSchema.safeParse(formData);
+  const { success, data, error } = LoginSchema.safeParse(formshortName);
   const { email, password } = data;
 
   if (!success) {
@@ -93,7 +93,7 @@ const imageKit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
   urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
-export async function uploadProfileImage(file) {
+export async function setUpProfileAction(file, data) {
   try {
     if (!file) throw new Error("No file provided");
 
@@ -114,15 +114,22 @@ export async function uploadProfileImage(file) {
   if(!user){
     return {error : "Login Please", status : 401}
   }
-
-  const profilePic = await Profile.create({profileImg : res.url, userId : user.id})
-
+  const uniqueName = await createUnique(data.name)
+  const profilePic = await Profile.create({profileImg : res.url, userId : user.id, ...data, uniqueName })
+  
   if(!profilePic){
     return 
   }
-  return {...res}
+  return {success : "profile set up successfully"}
   } catch (error) {
     return {error : "Something went wrong"}
   }
   
+}
+
+
+export async function createUnique(name) {
+  const shortName = name.replace(/\s+/g, '');
+  const random = Math.random().toString(36).substring(2, 8);
+  return `${shortName}_${random}`
 }
