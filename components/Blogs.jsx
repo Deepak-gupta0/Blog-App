@@ -23,9 +23,9 @@ export default function BlogsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ page, perPage }),
     });
-    const {tests, testCount} = await response.json();
-    setBlogs(tests);
-    setBlogCount(testCount)
+    const {blogs, blogCount} = await response.json();
+    setBlogs(blogs);
+    setBlogCount(blogCount)
   };
 
   const totalPages = Math.ceil(blogCount / perPage);
@@ -99,7 +99,7 @@ export default function BlogsPage() {
         "
       >
         {blogs?.map((blog, index) => (
-          <TravelCard key={index} blog={blog} title={blog.title} />
+          <TravelCard key={index} blog={blog} title={blog.title} desc={blog.desc} blogImg={blog.blogImg} />
         ))}
       </div>
       {isPageOutOfRange ? (

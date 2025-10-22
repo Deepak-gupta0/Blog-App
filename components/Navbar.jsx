@@ -1,13 +1,14 @@
 "use client"
+import { Search } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
 export default function Navbar() {
   const [mobNav, setMobNav] = useState(false)
   return (
     <nav
-  className="glass-nav fixed left-0 right-0 top-0 z-10 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-gray-900/60 backdrop-blur md:left-6 md:right-6 md:top-6 md:rounded-2xl md:max-w-screen"
+  className="fixed top-0 left-0 w-full z-60 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-white/90 text-gray-800 backdrop-blur md:max-w-screen"
 >
-  <div className="glass-nav flex items-center justify-between px-5 py-2 md:py-3">
+  <div className="flex items-center justify-between px-5 py-2 md:py-3">
     <span
       className="pointer-events-none absolute z-0 grid h-[16px] w-[16px] md:h-[50px] md:w-[50px] origin-[0px_0px] place-content-center rounded-full bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 text-2xl"
       style={{
@@ -24,7 +25,7 @@ export default function Navbar() {
         viewBox="0 0 24 24"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="text-white h-[16px] w-[16px] md:w-[1em] md:h-[1em]"
+        className="dark:text-white h-[16px] w-[16px] md:w-[1em] md:h-[1em]"
         xmlns="http://www.w3.org/2000/svg"
       >
         <line x1={7} y1={17} x2={17} y2={7} />
@@ -32,61 +33,62 @@ export default function Navbar() {
       </svg>
     </span>
 
-    <span className="pointer-events-none relative left-0 top-[50%] z-10 text-xl md:text-4xl font-black  md:absolute md:left-[50%] md:-translate-x-[50%] md:-translate-y-[50%] text-white">
+    <Link href="/" className=" relative left-0 top-[50%] z-10 text-xl md:text-4xl font-black  md:absolute md:left-[50%] md:-translate-x-[50%] md:-translate-y-[50%] dark:text-white cursor-pointer ">
       Horizon
-    </span>
+    </Link>
 
     <div className="hidden items-center gap-2 md:flex">
       <a
         href="#"
-        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
+        className="group hover:bg-gray-300/20 relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
       >
-        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+        <span className="relative z-10 dark:text-white/90 transition-colors dark:group-hover:text-white">
           Blogs
         </span>
         <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
       </a>
       <Link
         href="/create-blog"
-        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
+        className="group relative hover:bg-gray-300/20  scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
       >
-        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+        <span className="relative  z-10 dark:text-white/90 transition-colors dark:group-hover:text-white">
           Create
         </span>
         <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
       </Link>
       <Link
         href="/profile"
-        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
+        className="group hover:bg-gray-300/20 relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
       >
-        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+        <span className="relative z-10 dark:text-white/90 transition-colors dark:group-hover:text-white">
           Profile
         </span>
         <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
       </Link>
-      <a
+      <Link
         href="#"
-        className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
+        className="group relative hover:bg-gray-300/20 scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform hover:scale-105 active:scale-95"
       >
-        <span className="relative z-10 text-white/90 transition-colors group-hover:text-white">
+        <span className="relative z-10 dark:text-white/90 transition-colors dark:group-hover:text-white">
           Contact Us
         </span>
         <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity group-hover:opacity-100" />
-      </a>
+      </Link>
     </div>
 
     
     <div className="flex items-center gap-4">
-      <div className="text-white">
+      <div className="hidden md:block dark:text-white">
         <div className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform  active:scale-95">
-          <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-md md:w-fit">
-            <input type="text" placeholder='Explore blogs...' className='outline-none text-white'/>
-            <button className=' text-sm bg-white text-black py-2 px-2'>Search</button>
+          <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-md md:w-fit flex items-center">
+            <input type="text" placeholder='Explore blogs...' className='outline-none dark:text-white text-gray-700'/>
+            <button className=' text-sm  py-2 px-2 outline bg-blue-500 text-white'><Search /></button>
           </div>
           <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity " />
         </div>
       </div>
-      <button onClick={() => setMobNav(prev => !prev)} className="ml-2 block scale-100 text-xl md:text-3xl text-white/90 transition-all hover:scale-105 hover:text-white active:scale-95 md:hidden">
+      <div className='block md:hidden scale-70'><Search /></div>
+      <button onClick={() => setMobNav(prev => !prev)} className="ml-2 block scale-100 text-xl md:text-3xl dark:text-white/90 transition-all hover:scale-105 dark:hover:text-white active:scale-95 md:hidden">
         <svg
           stroke="currentColor"
           fill="none"
@@ -105,37 +107,42 @@ export default function Navbar() {
       </button>
     </div>
   </div>
-  <div hidden={!mobNav} className="block overflow-hidden backdrop-blur border-[1px] border-white/10 px-2 py-2 text-xs">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4">
-        <a
-          href="#"
-          className="text-white/90 transition-colors hover:text-white"
-        >
-          Products
-        </a>
-        <a
-          href="#"
-          className="text-white/90 transition-colors hover:text-white"
-        >
-          History
-        </a>
-        <a
-          href="#"
-          className="text-white/90 transition-colors hover:text-white"
-        >
-          Contact
-        </a>
-      </div>
+  <div hidden={!mobNav} className="block h-screen overflow-hidden backdrop-blur border-[1px] border-white/10 px-2 py-2 text-xs">
+      <div className="flex flex-col gap-6 py-6 px-4">
+  <Link
+    href="/blogs"
+    className="text-lg font-medium dark:text-white/90 transition-all duration-200 dark:hover:text-white hover:translate-x-1"
+  >
+    Blogs
+  </Link>
+  <Link
+    href="/create-blog"
+    className="text-lg font-medium dark:text-white/90 transition-all duration-200 dark:hover:text-white hover:translate-x-1"
+  >
+    Create
+  </Link>
+  <Link
+    href="/profile"
+    className="text-lg font-medium dark:text-white/90 transition-all duration-200 dark:hover:text-white hover:translate-x-1"
+  >
+    Profile
+  </Link>
+  <Link
+    href="/contact"
+    className="text-lg font-medium dark:text-white/90 transition-all duration-200 dark:hover:text-white hover:translate-x-1"
+  >
+    Contact Us
+  </Link>
+  
+  <div className="pt-4 border-t border-white/10">
+    <button className="w-full bg-red-600 hover:bg-red-700 active:bg-red-800 px-4 py-2.5 text-white font-medium rounded-md transition-colors duration-200 shadow-lg">
+      Logout
+    </button>
+  </div>
+</div>
 
-      <div>
-        <button className='bg-red-600 px-2 py-1 text-white rounded-xs'>
-          Logout
-        </button>
-      </div>
       
     </div>
-  </div>
 </nav>
 
   )

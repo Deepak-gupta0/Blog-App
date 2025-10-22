@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import sandMountain from "@/public/mountain.png";
+import sandMountain from "@/public/sand-mountain.jpg";
 import virtualHuman from "@/public/virtual-human.jpg";
 
 export default function Carousel() {
@@ -19,7 +19,7 @@ export default function Carousel() {
   // }, [images.length]);
 
   return (
-    <div className="relative w-full h-56 md:h-screen  overflow-hidden rounded-lg">
+    <div className="relative w-full h-56 md:h-screen  overflow-hidden ">
       {/* Slides */}
       {images.map((img, index) => (
         <div
@@ -61,7 +61,7 @@ export default function Carousel() {
           <div className=" flex flex-col md:justify-center md:items-center pb-3">
             <div className="flex md:gap-3 gap-1 items-center md:justify-center text-center">
               <div className="md:h-10 relative md:w-10 h-[15px] w-[15px] rounded-full overflow-hidden ">
-                <Image src={virtualHuman} className="object-cover" alt="a" fill/>
+                <Image src={virtualHuman} className="object-cover" alt="Landing Img" fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 160px"  loading="eager"/>
               </div>
               <p className="font-bold text-[8px] md:text-xl ">Deepak Gupta</p>
             </div>

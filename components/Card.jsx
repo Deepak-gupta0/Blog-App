@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TravelCard({title}) {
+export default function TravelCard({title, desc, blogImg}) {
   return (
     <div className="flex items-center justify-center p-3 sm:p-4">
       <div
@@ -13,7 +13,7 @@ export default function TravelCard({title}) {
         {/* 🏞️ Image Section */}
         <div className="relative">
           <img
-            src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop"
+            src={blogImg}
             alt="Mountain landscape"
             className="w-full aspect-[4/3] object-cover"
           />
@@ -46,7 +46,7 @@ export default function TravelCard({title}) {
 
           {/* Description */}
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-4 line-clamp-3">
-            Dive into the local culture, discover hidden spots, and experience the authentic charm that often remains unseen by most travelers.
+           {desc}
           </p>
 
           {/* Author */}
