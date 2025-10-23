@@ -9,7 +9,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 export default function BlogsPage() {
   const params = useSearchParams();
   const searchParams = params.get("page");
-  const [blogs, setBlogs] = useState([]);
+  const [blogs, setBlogs] = useState(null);
   const [blogCount, setBlogCount] = useState(0)
   // console.log(blogCount)
 
@@ -44,7 +44,9 @@ export default function BlogsPage() {
   }
 
   useEffect(() => {
-    fetchBlogs();
+    if(!blogs){
+      fetchBlogs();
+    }
   }, [searchParams]);
 
   const categories = [

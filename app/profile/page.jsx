@@ -1,30 +1,14 @@
-"use client";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { getSessionUser } from "@/lib/User"
+import { redirect } from "next/navigation"
 
-export default function UserProfile() {
-  const [userData, setUserData] = useState(null);
-  const router = useRouter();
+export default async function ProfilePage() {
+  const loggedInUser = await getSessionUser() 
+  console.log(loggedInUser)
 
-  useEffect(() => {
-    fetchUserProfileData();
-  }, []);
+  if(loggedInUser instanceof Response){
+    return redirect(`/login`)
+  }
 
-  const fetchUserProfileData = async () => {
-    const response = await fetch("/api/profile", { method: "GET" });
-
-    if (response.status == 401) {
-      return router.push("/login");
-    }
-    const data = await response.json();
-    
-    if (data.status == 401) {
-      return router.push("/login");
-    }
-    setUserData(data);
-
-    return router.push(`/profile/${data.uniqueName}`);
-  };
-
-  return <div></div>;
+  const uniqueName = loggedInUser.profile.uniqueName;
+  redirect(`/profile/${uniqueName}`)
 }

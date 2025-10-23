@@ -13,21 +13,21 @@ import { Profile } from "@/models/ProfileModel";
 
 
 export async function registerAction(_, { name, email, password }) {
-  const { success, shortName, error } = RegisterSchema.safeParse({
+  console.log(name, email, password)
+  const { success, data, error } = RegisterSchema.safeParse({
     name,
     email,
     password,
   });
 
-  if (error) {
+  if (!success) {
     return { error: flattenError(error).fieldErrors, success: false };
   }
-
   try {
     await connectDB();
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const createUser = await User.create({ ...shortName, password: hashedPassword });
+    const createUser = await User.create({ ...data, password: hashedPassword });
 
     return { success: true };
   } catch (error) {
