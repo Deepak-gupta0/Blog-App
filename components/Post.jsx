@@ -11,7 +11,7 @@ export default function Post({ desc, blogImg, profile, createdAt }) {
       <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center relative overflow-hidden flex-shrink-0">
           {profile.profileImg ? (
             <Image src={profile.profileImg} fill priority sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 160px"
-                  loading="eager"/>
+                  loading="eager" alt="blog-image"/>
           ) : (
             <User />
           )}

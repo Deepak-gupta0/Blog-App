@@ -10,10 +10,8 @@ import { cookies } from "next/headers";
 import ImageKit from "imagekit";
 import { Profile } from "@/models/ProfileModel";
 
-
-
 export async function registerAction(_, { name, email, password }) {
-  console.log(name, email, password)
+  console.log(name, email, password);
   const { success, data, error } = RegisterSchema.safeParse({
     name,
     email,
@@ -61,15 +59,17 @@ export async function loginAction(_, formshortName) {
       return { success: false, error: { password: "Invalid Password" } };
     }
 
-    const sessions = await Session.find({userId : user.id}).sort({createdAt : -1})
+    const sessions = await Session.find({ userId: user.id }).sort({
+      createdAt: -1,
+    });
 
-    if(sessions.length > 1){
-      const oldSessions = sessions.slice(1) //return remove the first one in array
-      const oldSessionsId = oldSessions.map((s) => s._id) //return [{_id : ""}, {_id : ""},...]
+    if (sessions.length > 1) {
+      const oldSessions = sessions.slice(1); //return remove the first one in array
+      const oldSessionsId = oldSessions.map((s) => s._id); //return [{_id : ""}, {_id : ""},...]
 
-      await Session.deleteMany({_id : {$in : oldSessionsId}})
+      await Session.deleteMany({ _id: { $in: oldSessionsId } });
     }
-    
+
     const session = await Session.create({ userId: user.id });
 
     cookieStore.set({
@@ -79,23 +79,58 @@ export async function loginAction(_, formshortName) {
       path: "/",
     });
 
-    return {success : true}
+    const profile = await Profile.findOne({ userId: session.userId });
 
+    if (!profile) {
+      return { success: true, hasProfile: false };
+    }
 
+    return { success: true, hasProfile: true };
   } catch (error) {
-    return {error : {email : "Something went wrong"}}
+    return { error: { email: "Something went wrong" } };
   }
 }
 
-
-const imageKit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
-});
 export async function setUpProfileAction(file, data) {
   try {
-    if (!file) throw new Error("No file provided");
+    const imgUrl = await getImageUrl(file);
+
+    const user = await getLoggedInUser();
+
+    if (!user) {
+      return { error: "Login Please", status: 401 };
+    }
+    const uniqueName = await createUnique(data.name);
+    const profilePic = await Profile.create({
+      profileImg: imgUrl,
+      userId: user.id,
+      ...data,
+      uniqueName,
+    });
+
+    if (!profilePic) {
+      return;
+    }
+    return { success: "profile set up successfully" };
+  } catch (error) {
+    return { error: "Something went wrong" };
+  }
+}
+
+export async function createUnique(name) {
+  const shortName = name.replace(/\s+/g, "");
+  const random = Math.random().toString(36).substring(2, 8);
+  return `${shortName}_${random}`;
+}
+
+export const getImageUrl = async (file) => {
+  const imageKit = new ImageKit({
+    publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+    privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+  });
+
+  if (!file) throw new Error("No file provided");
 
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
@@ -105,31 +140,9 @@ export async function setUpProfileAction(file, data) {
     fileName: file.name,
   });
 
-  if(!res){
-    return {error : "Image not saved on Internet"}
+  if (!res) {
+    return { error: "Image not saved on Internet" };
   }
-  
-  const user = await getLoggedInUser()
-
-  if(!user){
-    return {error : "Login Please", status : 401}
-  }
-  const uniqueName = await createUnique(data.name)
-  const profilePic = await Profile.create({profileImg : res.url, userId : user.id, ...data, uniqueName })
-  
-  if(!profilePic){
-    return 
-  }
-  return {success : "profile set up successfully"}
-  } catch (error) {
-    return {error : "Something went wrong"}
-  }
-  
-}
-
-
-export async function createUnique(name) {
-  const shortName = name.replace(/\s+/g, '');
-  const random = Math.random().toString(36).substring(2, 8);
-  return `${shortName}_${random}`
-}
+  console.log(res.url)
+  return res.url;
+};

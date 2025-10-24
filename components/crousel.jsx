@@ -7,7 +7,6 @@ import virtualHuman from "@/public/virtual-human.jpg";
 export default function Carousel() {
   const images = [sandMountain,sandMountain,sandMountain,sandMountain,];
   const [current, setCurrent] = useState(0);
-  console.log(sandMountain)
 
   // Auto-slide every 3 seconds
   // useEffect(() => {

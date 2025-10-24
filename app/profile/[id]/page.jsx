@@ -3,19 +3,17 @@ import ProfileSection from "@/components/ProfileSection";
 import { getSessionUser, getUserBySlug } from "@/lib/User";
 import { notFound } from "next/navigation";
 
-export default async function page({params}) {
+export default async function ProfileId({ params }) {
+  const { id } = await params;
 
-  const {id} = await params;
+  const { profile, blogs } = await getUserBySlug(id);
+  const loggedInUser = await getSessionUser();
 
-  const {profile, blogs} = await getUserBySlug(id)
-  const loggedInUser = await getSessionUser()
-
-  if(!profile){
-    return notFound()
+  if (!profile) {
+    return notFound();
   }
 
   const isOwner = loggedInUser.profile.userId === profile.userId;
-  console.log(isOwner)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -25,7 +23,7 @@ export default async function page({params}) {
       {/* Profile Container */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Info Section */}
-        <ProfileSection profile={profile}/>
+        <ProfileSection profile={profile} isOwner={isOwner} />
 
         {/* Tabs */}
         <div className="border-b border-gray-300 mt-6">
@@ -37,7 +35,7 @@ export default async function page({params}) {
         </div>
 
         {/* Posts Section */}
-        <PostSection blogs={blogs} profile={profile}/>
+        <PostSection blogs={blogs} profile={profile} />
       </div>
     </div>
   );

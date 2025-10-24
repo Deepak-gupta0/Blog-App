@@ -20,8 +20,11 @@ const Login = () => {
     if(state?.error){
       setErrors(state.error)
     }
-    if(state.success){
+    if(state.success && !state.hasProfile ){
       return router.push("/set-up")
+    }
+    if(state.success && state.hasProfile ){
+      return router.push("/")
     }
   }, [state])
 
