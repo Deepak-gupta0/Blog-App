@@ -29,7 +29,7 @@ export default async function ProfileId({ params }) {
         <div className="border-b border-gray-300 mt-6">
           <div className="flex gap-8">
             <button className="pb-3 px-2 border-b-2 border-blue-500 font-semibold text-blue-500">
-              Posts (42)
+              Posts ({blogs.length})
             </button>
           </div>
         </div>

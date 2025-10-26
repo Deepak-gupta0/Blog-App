@@ -49,17 +49,6 @@ export default function TravelCard({title, desc, blogImg}) {
            {desc}
           </p>
 
-          {/* Author */}
-          <div className="flex items-center">
-            <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
-              alt="Seraphina Isabella"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover mr-3"
-            />
-            <span className="text-gray-800 text-sm sm:text-base font-medium">
-              Seraphina Isabella
-            </span>
-          </div>
         </div>
       </div>
     </div>
