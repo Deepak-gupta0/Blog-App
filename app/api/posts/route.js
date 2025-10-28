@@ -12,7 +12,7 @@ export async function POST(request) {
 
   const skip = (page - 1)*5
 
-  const blog = await Blog.find().sort({createdAt : -1}).skip(skip).limit(limit).lean()
+  const blogs = await Blog.find().sort({createdAt : -1}).skip(skip).limit(limit).lean()
 
   // Extract userIds from blogs
   const userIds = blogs.map((b) => b.userId);

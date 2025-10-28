@@ -1,12 +1,18 @@
 "use client";
+import { SearchBlogAction } from "@/app/actions/SearchBlogAction";
 import { Search } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 export default function Navbar() {
   const [mobNav, setMobNav] = useState(false);
+  const [inputs, setInputs] = useState("");
+
+  const handleSubmit = async () => {
+    await SearchBlogAction(inputs)
+  }
   return (
     <nav className="fixed top-0 left-0 w-full z-60 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-white/90 text-gray-800 backdrop-blur md:max-w-screen">
-      <div className="flex items-center justify-between px-5 py-2 md:py-3">
+      <div className="flex items-center justify-between px-5 py-1 md:py-3">
         <span
           className="pointer-events-none absolute z-0 grid h-[16px] w-[16px] md:h-[50px] md:w-[50px] origin-[0px_0px] place-content-center rounded-full bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 text-2xl"
           style={{
@@ -77,24 +83,23 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden md:block dark:text-white">
+        <div className="flex items-center gap-4 justify-between">
+          <div className=" md:block dark:text-white">
             <div className="group relative scale-100 overflow-hidden rounded-lg px-4 py-2 transition-transform  active:scale-95">
-              <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-md md:w-fit flex items-center">
+              <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-4xl md:w-fit flex items-center">
                 <input
                   type="text"
+                  value={inputs}
+                  onChange={(e) => setInputs(e.target.value)}
                   placeholder="Explore blogs..."
                   className="outline-none dark:text-white text-gray-700"
                 />
-                <button className=" text-sm  py-2 px-2 outline bg-blue-500 text-white">
+                <button onClick={handleSubmit} className=" text-sm  py-2 px-2 rounded-full outline bg-blue-500 text-white">
                   <Search />
                 </button>
               </div>
               <span className="absolute inset-0 z-0 bg-gradient-to-br from-white/20 to-white/5 opacity-0 transition-opacity " />
             </div>
-          </div>
-          <div className="block md:hidden scale-70">
-            <Search />
           </div>
           <button
             onClick={() => setMobNav((prev) => !prev)}
