@@ -1,17 +1,24 @@
 "use client";
-import { SearchBlogAction } from "@/app/actions/SearchBlogAction";
+import { SearchBlogAction } from "@/app/actions/SearchAction";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 export default function Navbar() {
   const [mobNav, setMobNav] = useState(false);
-  const [inputs, setInputs] = useState("");
+  const [query, setQuery] = useState("");
+  const router = useRouter()
 
-  const handleSubmit = async () => {
-    await SearchBlogAction(inputs)
-  }
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      // ✅ Always redirect to blogs search page
+      router.push(`/search?tab=blogs&q=${encodeURIComponent(query.trim())}`);
+      setQuery(""); // optional: clear input after search
+    }
+  };
   return (
-    <nav className="fixed top-0 left-0 w-full z-60 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-white/90 text-gray-800 backdrop-blur md:max-w-screen">
+    <nav className="fixed top-0 left-0 w-full z-60 mx-auto max-w-6xl overflow-hidden border-[1px] border-white/10 bg-white/90 text-gray-800 backdrop-blur md:max-w-screen ">
       <div className="flex items-center justify-between px-5 py-1 md:py-3">
         <span
           className="pointer-events-none absolute z-0 grid h-[16px] w-[16px] md:h-[50px] md:w-[50px] origin-[0px_0px] place-content-center rounded-full bg-gradient-to-br from-indigo-600 from-40% to-indigo-400 text-2xl"
@@ -89,12 +96,12 @@ export default function Navbar() {
               <div className="relative z-10 transition-colors outline pl-4 overflow-hidden  rounded-4xl md:w-fit flex items-center">
                 <input
                   type="text"
-                  value={inputs}
-                  onChange={(e) => setInputs(e.target.value)}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                   placeholder="Explore blogs..."
                   className="outline-none dark:text-white text-gray-700"
                 />
-                <button onClick={handleSubmit} className=" text-sm  py-2 px-2 rounded-full outline bg-blue-500 text-white">
+                <button onClick={handleSearch} className=" text-sm  py-2 px-2 rounded-full outline bg-blue-500 text-white">
                   <Search />
                 </button>
               </div>

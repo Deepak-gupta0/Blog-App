@@ -1,11 +1,20 @@
-import BlogPost from '@/components/BlogPost'
-import React from 'react'
+import SearchBlogs from "@/components/SearchBlogs";
+import SearchProfiles from "@/components/SearchProfiles";
 
-export default function page() {
-  const blog = []
-  return (
-    <div className='my-4'>
-      <BlogPost blog={blog} />
+export default async function SearchPage(props) {
+  const searchParams = await props.searchParams;
+
+  const tab = searchParams.tab || "";
+  const query = searchParams.q || "";
+  console.log(tab)
+
+  return <div>
+    <div hidden={tab !== "blogs"}>
+      <SearchBlogs />
     </div>
-  )
+
+    <div hidden={tab !== "profiles"}>
+      <SearchProfiles />
+    </div>
+  </div>;
 }

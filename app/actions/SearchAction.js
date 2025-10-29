@@ -34,7 +34,7 @@ const toPlainObject = (doc) => {
   return plain;
 };
 
-export async function SearchBlogAction(data) {
+export async function SearchBlogsAction(data) {
   await connectDB();
 
   try {
@@ -49,7 +49,7 @@ export async function SearchBlogAction(data) {
     const userIds = blogs.map((blog) => blog.userId);
     const profiles = await Profile.find({
       userId: { $in: userIds },
-    }).lean();
+    }).select("-_id -__v").lean();
 
     // Merge blog with profile
     const mergedBlogs = blogs.map((blog) => {
@@ -64,22 +64,45 @@ export async function SearchBlogAction(data) {
     });
 
     // Search Profiles separately
-    const profilesSearch = await Profile.find({
-      $or: [
-        { name: { $regex: data, $options: "i" } },
-        { uniqueName: { $regex: data, $options: "i" } },
-      ],
-    }).lean();
+    
+    //copy the data
+    const copyData = JSON.parse(JSON.stringify(mergedBlogs))
 
-    const safeProfiles = profilesSearch.map(toPlainObject);
 
-    // Return plain, serializable data
+    //removing the field.
+    const result = copyData.map(({userId, __v, ...rest}) => rest)
+
     return {
-      blogsData: mergedBlogs,
-      profileData: safeProfiles,
+      blogsData: result,
     };
   } catch (error) {
     console.error("SearchBlogAction Error:", error);
     throw new Error("Failed to search blogs and profiles");
+  }
+}
+
+
+export async function SearchProfilesAction(profileName) {
+
+  try {
+    await connectDB()
+
+    const profiles = await Profile.find({
+      $or : [
+        {name : {$regex : profileName, $options : "i"}},
+        {uniqueName : {$regex : profileName, $options : "i"}}
+      ]
+    }).sort({createdAt : -1}).select("-userId -__v").lean()
+
+    if(!profiles){
+      return {error : "No blogs found."}
+    }
+
+    const copyData = JSON.parse(JSON.stringify(profiles))
+
+    return copyData;
+  } catch (error) {
+    console.error(error)
+    throw new Error("Failed to search blogs.");
   }
 }

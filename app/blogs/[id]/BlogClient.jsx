@@ -6,7 +6,6 @@ import Link from "next/link";
 export default function BlogClient({ blogId }) {
   const [blog, setBlog] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  console.log(blog);
 
    useEffect(() => {
     fetchBlog();

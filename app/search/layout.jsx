@@ -1,37 +1,35 @@
-"use client"
-import { useState } from "react"
+"use client";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
-export default function layout({children}) {
+export default function SearchLayout({ children }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  // console.log(pathname)
 
-  const [isAll, setIsAll] = useState(true)
-  const [isBlog, setIsBlog] = useState(false)
-  const [isProfile, setIsProfile] = useState(false)
-
-  const handleBlogOpen = () => {
-    setIsAll(false)
-    setIsBlog(true)
-    setIsProfile(false)
-  }
-  const handleProfileOpen = () => {
-    setIsAll(false)
-    setIsProfile(true)
-    setIsBlog(false)
-  }
-  const handleAllPage = () => {
-    setIsAll(true)
-    setIsProfile(false)
-    setIsBlog(false)
-  }
-
+  const query = searchParams.get("q") || "";
+  const tab = searchParams.get("tab") || "";
+  // console.log(tab)
 
   return (
-    <div className="flex flex-col mt-20 px-7">
-      <div className="w-full text-lg gap-6 flex border-b  ">
-        <button onClick={handleAllPage} className={` py-2 ${isAll ? "border-b-4 rounded border-blue-400"  : null}`}><span>All</span></button>
-        <button onClick={handleBlogOpen} className={`py-2 ${isBlog ? "border-b-4 rounded border-blue-400" : null}`}><span>Blog</span></button>
-        <button onClick={handleProfileOpen} className={`py-2 ${isProfile ? "border-b-4 rounded border-blue-400" : null}`}><span>Profile</span></button>
-      </div>
-      <div>{children}</div>
+    <div className="mt-20">
+      <nav className="flex gap-6 border-b px-4 mt-2">
+        <button
+          onClick={() => router.push(`/search?tab=blogs&q=${encodeURIComponent(query)}`)}
+          className={`pb-2 cursor-pointer ${tab === "blogs" ? "border-b-2 border-black" : ""}`}
+        >
+          Blogs
+        </button>
+
+        <button
+          onClick={() => router.push(`/search?tab=profiles&q=${encodeURIComponent(query)}`)}
+          className={`pb-2 cursor-pointer ${tab === "profiles" ? "border-b-2 border-black" : ""}`}
+        >
+          Profiles
+        </button>
+      </nav>
+
+      <div className="p-4">{children}</div>
     </div>
-  )
+  );
 }
