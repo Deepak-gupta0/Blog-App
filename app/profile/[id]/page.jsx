@@ -1,12 +1,18 @@
 import PostSection from "@/components/PostSection";
 import ProfileSection from "@/components/ProfileSection";
 import { getUserBySlug } from "@/lib/User";
+import { redirect } from "next/dist/server/api-utils";
 
 export default async function ProfileId(props) {
   const params = await props.params;
   const { id } = params;
 
-  const { profile, blogs, isOwner } = await getUserBySlug(id);
+  const response = await getUserBySlug(id);
+ 
+  if(response?.error){
+   return redirect("/login")
+  }
+  const { profile, blogs, isOwner } = response;
 
   if (!profile) {
     return <p className="text-center text-gray-500">Profile doesn't exists.</p>;

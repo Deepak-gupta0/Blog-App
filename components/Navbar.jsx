@@ -14,6 +14,9 @@ export default function Navbar() {
     if (!uniqueNames) {
       const fetchUniqueName = async () => {
         const response = await fetch("/api/uniquename", { method: "GET" });
+        if(response.status === 401){
+          return router.push("/login")
+        }
         const { uniqueName } = await response.json();
         setUniqueNames(uniqueName);
       };
