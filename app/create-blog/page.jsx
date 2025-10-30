@@ -7,8 +7,8 @@ import { BlogAction } from '../actions/BlogAction';
 import { useRouter } from 'next/navigation';
 
 export default function BlogCreator() {
-  const [title, setTitle] = useState('uuuuuuuuuuu');
-  const [desc, setDesc] = useState('ppppppppppppppppppllllllllllllllllllllll');
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({})

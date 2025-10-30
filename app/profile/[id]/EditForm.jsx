@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { EditProfileAction } from "./EditProfileAction";
 import { useRouter } from "next/navigation";
+import { LogOutAction } from "@/app/actions/authAction";
 
 export default function EditForm({isOwnerProfile, profile}) {
   const [isEditing, setIsEditing] = useState(false);
@@ -32,13 +33,27 @@ export default function EditForm({isOwnerProfile, profile}) {
     router.refresh(); 
   }
 
+   const handleLogout = async () => {
+      const logOut = await LogOutAction()
+  
+      if(logOut.success){
+        redirect("/login")
+      }
+    }
+
   return (
     <div>
       <div className="pt-4 flex justify-end">
         {isOwnerProfile && (
-          <button onClick={() => setIsEditing(prev => !prev)} className="px-6 py-2 border border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
+          <div>
+          <button onClick={() => setIsEditing(prev => !prev)} className="px-6 py-2 border border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition cursor-pointer">
             Edit Profile
           </button>
+          <button onClick={handleLogout} className="px-6 py-2 border bg-red-600/90 border-gray-300 rounded-full font-semibold text-gray-100 cursor-pointer">
+            Logout
+          </button>
+
+          </div>
         )}
       </div>
       {isEditing && (

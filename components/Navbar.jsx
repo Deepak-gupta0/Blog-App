@@ -1,4 +1,5 @@
 "use client";
+import { LogOutAction } from "@/app/actions/authAction";
 import { Search, X } from "lucide-react";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
@@ -20,11 +21,6 @@ export default function Navbar() {
     }
   }, []);
 
-  // const handleProfileLink = () => {
-  //   const link = `/profile/${uniqueNames}`;
-  //   setMobNav(false)
-  //   return redirect(link);
-  // };
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -32,6 +28,14 @@ export default function Navbar() {
       // ✅ Always redirect to blogs search page
       router.push(`/search?tab=blogs&q=${encodeURIComponent(query.trim())}`);
       setQuery(""); // optional: clear input after search
+    }
+  };
+
+  const handleLogout = async () => {
+    const logOut = await LogOutAction();
+
+    if (logOut.success) {
+      redirect("/login");
     }
   };
   return (
@@ -132,7 +136,6 @@ export default function Navbar() {
             onClick={() => setMobNav((prev) => !prev)}
             className="ml-2 block scale-100 text-xl md:text-3xl dark:text-white/90 transition-all hover:scale-105 dark:hover:text-white active:scale-95 md:hidden"
           >
-
             <svg
               hidden={mobNav}
               stroke="currentColor"
@@ -149,7 +152,7 @@ export default function Navbar() {
               <line x1={3} y1={6} x2={21} y2={6} />
               <line x1={3} y1={18} x2={21} y2={18} />
             </svg>
-            <X hidden={!mobNav}/>
+            <X hidden={!mobNav} />
           </button>
         </div>
       </div>
@@ -174,7 +177,7 @@ export default function Navbar() {
           </Link>
           <Link
             href={`/profile/${uniqueNames}`}
-           onClick={() => mobNav(false)}
+            onClick={() => mobNav(false)}
             className="text-lg inline-flex font-medium dark:text-white/90 transition-all duration-200 dark:hover:text-white hover:translate-x-1"
           >
             Profile
@@ -187,8 +190,11 @@ export default function Navbar() {
             Contact Us
           </Link>
 
-          <div className="pt-4 border-t border-white/10">
-            <button className="w-full bg-red-600 hover:bg-red-700 active:bg-red-800 px-4 py-2.5 text-white font-medium rounded-md transition-colors duration-200 shadow-lg">
+          <div className="p-4 border-t border-white/10">
+            <button
+              onClick={handleLogout}
+              className="w-full bg-red-600 hover:bg-red-700 active:bg-red-800 px-4 py-2.5 text-white font-medium rounded-md transition-colors duration-200 shadow-lg"
+            >
               Logout
             </button>
           </div>

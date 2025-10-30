@@ -9,15 +9,16 @@ export default function SearchBlogs() {
   const searchParams = useSearchParams()
 
   const blogName = searchParams.get("q") || "";
+
   const [blogs, setBlogs] = useState([])
 
   useEffect(() => {
-    const fetchSearchBlogs = async (data) => {
-    const blogsData = await SearchBlogsAction(data)
-    setBlogs(blogsData.blogsData)
-  }
-    fetchSearchBlogs(blogName)
-  }, [blogName])
+    const fetchSearchBlogs = async () => {
+      const blogsData = await SearchBlogsAction(blogName);
+      setBlogs(blogsData.blogsData);
+    };
+    fetchSearchBlogs();
+  }, [blogName]);
 
   if(!(blogs?.length)){
     return <p className="text-center text-gray-500">No blogs found.</p>;

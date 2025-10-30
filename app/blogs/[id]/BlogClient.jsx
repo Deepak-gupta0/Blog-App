@@ -31,7 +31,7 @@ export default function BlogClient({ blogId }) {
     <>
         <h1 hidden={!isLoading}>Loading...</h1>
 
-        <div hidden={isLoading} className="min-h-screen bg-gray-50">
+        <div hidden={isLoading} className="min-h-screen bg-gray-50 mx-auto w-fit">
           {/* Header */}
           <div className="bg-white shadow-sm">
             <div className="max-w-4xl mx-auto px-4 py-4">
@@ -72,7 +72,7 @@ export default function BlogClient({ blogId }) {
               <img
                 src={blog?.blogImg}
                 alt={blog?.title}
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                className="w-auto md:h-140 object-cover rounded-lg shadow-lg"
               />
             </div>
 

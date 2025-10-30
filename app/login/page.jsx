@@ -8,8 +8,8 @@ import { flattenError } from "zod";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const [email, setEmail] = useState("deepak@gmail.com")
-  const [password, setPassword] = useState("Deepak9111")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [Errors, setErrors] = useState({})
   const router = useRouter()
 

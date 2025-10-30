@@ -144,3 +144,15 @@ export const getImageUrl = async (file) => {
   }
   return res.url;
 };
+
+export async function LogOutAction() {
+  const cookieStore = await cookies()
+    const user = await getLoggedInUser();
+  
+    const {id} = user;
+  
+    await Session.findOneAndDelete({userId : id})
+    cookieStore.delete("sid")
+  
+    return {success : true}
+}
