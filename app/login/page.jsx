@@ -14,7 +14,6 @@ const Login = () => {
   const router = useRouter()
 
   const [state, formAction, isPending] = useActionState(loginAction, {})
-  console.log(state)
 
   useEffect(() => {
     if(state?.error){

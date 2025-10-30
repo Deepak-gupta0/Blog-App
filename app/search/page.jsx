@@ -6,7 +6,6 @@ export default async function SearchPage(props) {
 
   const tab = searchParams.tab || "";
   const query = searchParams.q || "";
-  console.log(tab)
 
   return <div>
     <div hidden={tab !== "blogs"}>

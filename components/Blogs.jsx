@@ -4,14 +4,29 @@ import DropdownMenuRadioGroupDemo from "./DropdownMenu";
 import TravelCard from "./Card";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function BlogsPage() {
   const params = useSearchParams();
   const searchParams = params.get("page");
-  const [blogs, setBlogs] = useState(null);
-  const [blogCount, setBlogCount] = useState(0)
-  // console.log(blogCount)
+  const [blogs, setBlogs] = useState([]);
+  const [blogCount, setBlogCount] = useState(0);
+  const [sortOrder, setSortOrder] = useState("newest");
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = (value) => {
+    setSortOrder(value);
+    setBlogs((prevBlogs) => {
+      const sorted = [...prevBlogs]; // copy banaya
+      if (value === "oldest") {
+        sorted.reverse(); // agar oldest select hua toh reverse kar do
+      } else {
+        sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // newest
+      }
+      return sorted;
+    });
+    setOpen(false);
+  };
 
   let page = parseInt(searchParams, 10);
   page = !page || page < 1 ? 1 : page;
@@ -23,13 +38,12 @@ export default function BlogsPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ page, perPage }),
     });
-    const {blogs, blogCount} = await response.json();
+    const { blogs, blogCount } = await response.json();
     setBlogs(blogs);
-    setBlogCount(blogCount)
+    setBlogCount(blogCount);
   };
 
   const totalPages = Math.ceil(blogCount / perPage);
-  // console.log(totalPages)
 
   const prevPage = page - 1 > 0 ? page - 1 : 1;
   const nextPage = page + 1;
@@ -42,19 +56,12 @@ export default function BlogsPage() {
       pageNumbers.push(i);
     }
   }
-
   useEffect(() => {
-    if(!blogs){
+   
       fetchBlogs();
-    }
   }, [searchParams]);
 
-  const categories = [
-    "All",
-    "Destination",
-    "Culinary",
-    "Lifestyle",
-  ];
+  const categories = ["All", "Destination", "Culinary", "Lifestyle"];
 
   return (
     <div className="py-10 px-6 flex flex-col">
@@ -66,30 +73,40 @@ export default function BlogsPage() {
         </p>
       </div>
 
-      <div className="py-4 flex justify-between flex-wrap gap-4">
-        <div className="flex gap-2  md:overflow-x-scroll">
-          <div className="flex items-center md:hidden">
-          <ChevronLeft className="text-black"/>
-          </div>
+      <div className="relative inline-block text-left">
+        <button
+          onClick={() => setOpen((prev) => !prev)}
+          className="flex items-center justify-between w-40 px-4 py-2 text-sm font-medium bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 transition"
+        >
+          {sortOrder === "newest" ? "Newest" : "Oldest"}
+          <ChevronDown
+            className={`ml-2 h-4 w-4 transition-transform ${
+              open ? "rotate-180" : ""
+            }`}
+          />
+        </button>
 
-          {categories.map((category) => (
+        {open && (
+          <div className="absolute left-0-0 z-10 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
             <button
-              key={category}
-              className="px-4 py-2 dark:bg-gray-800 shadow-xl md:shadow-lg rounded-md h-fit"
+              onClick={() => handleSelect("newest")}
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+                sortOrder === "newest" ? "bg-gray-100 font-semibold" : ""
+              }`}
             >
-              {category}
+              Newest
             </button>
-          ))}
-          <div className="flex items-center md:hidden">
-          <ChevronRight className="text-black"/>
+            <button
+              onClick={() => handleSelect("oldest")}
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
+                sortOrder === "oldest" ? "bg-gray-100 font-semibold" : ""
+              }`}
+            >
+              Oldest
+            </button>
           </div>
-        </div>
-        <div className="inline-flex items-center gap-2">
-          Sort by:
-          <DropdownMenuRadioGroupDemo />
-        </div>
+        )}
       </div>
-
       <div
         className="
           grid gap-6
@@ -101,14 +118,19 @@ export default function BlogsPage() {
         "
       >
         {blogs?.map((blog, index) => (
-          <TravelCard key={index} blog={blog} title={blog.title} desc={blog.desc} blogImg={blog.blogImg} />
+          <TravelCard
+            key={index}
+            blog={blog}
+            title={blog.title}
+            desc={blog.desc}
+            blogImg={blog.blogImg}
+          />
         ))}
       </div>
       {isPageOutOfRange ? (
-					<div>No more pages...</div>
-				): (
-
-					<div className="flex justify-center items-center mt-16">
+        <div>No more pages...</div>
+      ) : (
+        <div className="flex justify-center items-center mt-16">
           <div className="flex border-[1px] gap-4 rounded-[10px] border-light-green p-4">
             {page === 1 ? (
               <div className="opacity-60" aria-disabled="true">
@@ -145,8 +167,7 @@ export default function BlogsPage() {
             )}
           </div>
         </div>
-
-				)}
+      )}
     </div>
   );
 }

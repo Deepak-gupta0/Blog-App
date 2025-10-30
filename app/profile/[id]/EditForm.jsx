@@ -12,7 +12,7 @@ import {
 import { EditProfileAction } from "./EditProfileAction";
 import { useRouter } from "next/navigation";
 
-export default function EditForm({isOwner, profile}) {
+export default function EditForm({isOwnerProfile, profile}) {
   const [isEditing, setIsEditing] = useState(false);
   const [profileData,setProfileData] = useState(profile) 
   const router = useRouter()
@@ -27,9 +27,7 @@ export default function EditForm({isOwner, profile}) {
   }
 
   const handleSave = async () => {
-    console.log(profileData)
     await EditProfileAction(profileData)
-    console.log("save handler worked")
     setIsEditing(false)
     router.refresh(); 
   }
@@ -37,7 +35,7 @@ export default function EditForm({isOwner, profile}) {
   return (
     <div>
       <div className="pt-4 flex justify-end">
-        {isOwner && (
+        {isOwnerProfile && (
           <button onClick={() => setIsEditing(prev => !prev)} className="px-6 py-2 border border-gray-300 rounded-full font-semibold text-gray-700 hover:bg-gray-100 transition">
             Edit Profile
           </button>

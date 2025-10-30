@@ -5,11 +5,9 @@ export default function SearchLayout({ children }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  // console.log(pathname)
 
   const query = searchParams.get("q") || "";
   const tab = searchParams.get("tab") || "";
-  // console.log(tab)
 
   return (
     <div className="mt-20">

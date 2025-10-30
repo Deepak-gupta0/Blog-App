@@ -5,7 +5,6 @@ import { Profile } from "@/models/ProfileModel";
 
 export async function GET(_, { params }) {
   const { id } = await params;
-  console.log(id);
 
   try {
     await connectDB();

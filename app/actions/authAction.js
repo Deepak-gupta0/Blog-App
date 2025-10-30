@@ -11,7 +11,6 @@ import ImageKit from "imagekit";
 import { Profile } from "@/models/ProfileModel";
 
 export async function registerAction(_, { name, email, password }) {
-  console.log(name, email, password);
   const { success, data, error } = RegisterSchema.safeParse({
     name,
     email,
@@ -143,6 +142,5 @@ export const getImageUrl = async (file) => {
   if (!res) {
     return { error: "Image not saved on Internet" };
   }
-  console.log(res.url)
   return res.url;
 };

@@ -29,18 +29,13 @@ export async function GET() {
     const user = await getLoggedInUser();
 
     if (user instanceof Response) {
-      console.log("user verify nhi hua");
       return user;
     }
-    console.log(user);
     const blogs = await Blog.find({ userId: user.id });
 
     if (!blogs) {
-      console.log("blog nhi mila");
       return Response.json([], { status: 200 });
     }
-    console.log("kaam ho gya");
-    console.log(blogs);
     return Response.json(
       blogs.map(({ id, title, desc, blogImg, userId, createdAt }) => ({
         id,

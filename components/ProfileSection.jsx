@@ -4,7 +4,7 @@ import { Calendar, Link2, X, Edit2, User, MapPin, FileText} from "lucide-react";
 import ProfileImg from "./ProfileImg";
 
 
-export default function ProfileSection({ profile, isOwner }) {
+export default function ProfileSection({ profile, isOwnerProfile }) {
   const { createdAt } = profile;
   const isEditing = true
 
@@ -13,12 +13,11 @@ export default function ProfileSection({ profile, isOwner }) {
   return (
     <div className="relative">
       {/* Profile Image */}
-      <ProfileImg profile={profile} isOwner={isOwner}/>
+      <ProfileImg profile={profile} isOwnerProfile={isOwnerProfile}/>
 
       {/* Edit Profile Button */}
-
       
-      <EditForm isOwner={isOwner} profile={profile}/>
+      <EditForm isOwnerProfile={isOwnerProfile} profile={profile}/>
 
       {/* User Details */}
       <div className="mt-16 pb-4">
@@ -42,16 +41,6 @@ export default function ProfileSection({ profile, isOwner }) {
         </div>
 
         {/* Stats */}
-        <div className="flex gap-6 mt-6">
-          <div>
-            <span className="font-bold text-gray-900">248</span>
-            <span className="text-gray-600 ml-1">Following</span>
-          </div>
-          <div>
-            <span className="font-bold text-gray-900">1.2K</span>
-            <span className="text-gray-600 ml-1">Followers</span>
-          </div>
-        </div>
       </div>
     </div>
   );

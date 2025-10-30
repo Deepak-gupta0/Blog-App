@@ -15,16 +15,6 @@ export default function Carousel() {
         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
     },
     {
-      id: "2b3c4d5e",
-      name: "Aisha Sharma",
-      createdAt: "2025-10-20T11:30:00Z",
-      description:
-        "Understanding the importance of clean UI and UX in web design.",
-      personImage: "https://randomuser.me/api/portraits/women/45.jpg",
-      blogImage:
-        "https://images.unsplash.com/photo-1522204501790-03b60a85d8e0",
-    },
-    {
       id: "3c4d5e6f",
       name: "Ravi Verma",
       createdAt: "2025-10-18T15:15:00Z",
@@ -59,12 +49,12 @@ export default function Carousel() {
   const [current, setCurrent] = useState(0);
 
   // Auto-slide
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setCurrent((prev) => (prev === blogs.length - 1 ? 0 : prev + 1));
-  //   }, 4000);
-  //   return () => clearInterval(interval);
-  // }, [blogs.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev === blogs.length - 1 ? 0 : prev + 1));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [blogs.length]);
 
   return (
     <div className="relative w-full h-56 md:h-screen overflow-hidden bg-black">

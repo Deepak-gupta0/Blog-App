@@ -10,7 +10,6 @@ export default function SearchBlogs() {
 
   const blogName = searchParams.get("q") || "";
   const [blogs, setBlogs] = useState([])
-  // console.log(blogs)
 
   useEffect(() => {
     const fetchSearchBlogs = async (data) => {

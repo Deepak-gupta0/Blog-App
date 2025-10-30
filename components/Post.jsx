@@ -23,11 +23,11 @@ export default function Post({ desc, blogImg, profile, createdAt }) {
           <span className="text-gray-500">· {date}</span>
         </div>
         <p className="mt-2 text-gray-800">{desc}</p> 
-        <div className="mb-3 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div className="mb-3 rounded-2xl overflow-hidden">
           <img
             src={blogImg} //yaha kuch
             alt="Blog cover"
-            className="w-full h-auto object-cover"
+            className="w-auto h-[250px] object-cover  border border-gray-200 dark:border-gray-700"
           />
         </div>
       </div>
