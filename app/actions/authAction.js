@@ -11,6 +11,8 @@ import ImageKit from "imagekit";
 import { Profile } from "@/models/ProfileModel";
 
 export async function registerAction(_, { name, email, password }) {
+
+  // console.log({name, email, password})
   const { success, data, error } = RegisterSchema.safeParse({
     name,
     email,
@@ -36,6 +38,7 @@ export async function registerAction(_, { name, email, password }) {
 }
 
 export async function loginAction(_, formshortName) {
+  console.log(formshortName)
   const cookieStore = await cookies();
   const { success, data, error } = LoginSchema.safeParse(formshortName);
   const { email, password } = data;

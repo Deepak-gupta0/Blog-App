@@ -8,9 +8,9 @@ import { flattenError } from "zod";
 import { useRouter } from "next/navigation";
 
 const Register = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [name, setName] = useState("deepakgup")
+  const [email, setEmail] = useState("pak@gmail.com")
+  const [password, setPassword] = useState("123@Deepak")
   const [Errors, setErrors] = useState({})
   const router = useRouter()
 
@@ -30,9 +30,11 @@ const Register = () => {
 
 
   const handleSubmit = () => {
-
-    const {success, data, error} = RegisterSchema.safeParse({name, email, password})
-
+    // console.log({name, email, password})
+    const response = RegisterSchema.safeParse({name, email, password})
+    console.log(response)
+    const {error, data, success} = response; 
+   
     if(error){
       setErrors(flattenError(error).fieldErrors)
       return 

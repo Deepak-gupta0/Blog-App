@@ -8,8 +8,8 @@ import { flattenError } from "zod";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("pak@gmail.com")
+  const [password, setPassword] = useState("123@Deepak")
   const [Errors, setErrors] = useState({})
   const router = useRouter()
 
@@ -30,8 +30,9 @@ const Login = () => {
 
 
   const handleSubmit = () => {
-    const {success, data, error} = LoginSchema.safeParse({email, password})
-
+    const {error, data, success} = LoginSchema.safeParse({email, password})
+    console.log(data)
+    console.log(error)
     if(error){
       setErrors(flattenError(error).fieldErrors)
       return;

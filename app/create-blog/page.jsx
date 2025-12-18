@@ -1,174 +1,165 @@
-"use client"
-import React, { useActionState, useEffect, useState } from 'react';
-import { Upload, X, Image, Save } from 'lucide-react';
-import { BlogSchema } from '@/lib/Schemas/BlogSchema';
-import { flattenError } from 'zod';
-import { BlogAction } from '../actions/BlogAction';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useActionState, useEffect, useState } from "react";
+import { Upload, X, Loader2 } from "lucide-react";
+import { BlogSchema } from "@/lib/Schemas/BlogSchema";
+import { flattenError } from "zod";
+import { BlogAction } from "../actions/BlogAction";
+import { useRouter } from "next/navigation";
 
 export default function BlogCreator() {
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
+  const [title, setTitle] = useState("");
+  const [desc, setDesc] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [errors, setErrors] = useState({})
-  const router = useRouter()
+  const [errors, setErrors] = useState({});
+  const router = useRouter();
 
-  const [state, formAction, isPending] = useActionState(BlogAction, {}) 
+  const [state, formAction, isPending] = useActionState(BlogAction, {});
 
-   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImage(file);
+    setImagePreview(URL.createObjectURL(file));
   };
 
   useEffect(() => {
-    if(state.error){
-      return setErrors(state.error)
+    if (state?.error) setErrors(state.error);
+
+    if (state?.success) {
+      setTitle("");
+      setDesc("");
+      setImage(null);
+      setImagePreview(null);
+      router.push("/");
+    }
+  }, [state, router]);
+
+  const handleSubmit = async () => {
+    if (!image) return setErrors({ image: "Please upload a cover image" });
+
+    const parsed = BlogSchema.safeParse({ title, desc });
+    if (!parsed.success) {
+      return setErrors(flattenError(parsed.error).fieldErrors);
     }
 
-    if(state.success){
-      setTitle("")
-      setDesc("")
-      setImage(null)
-      setImagePreview(null)
-
-      return router.push("/")
-    }
-  }, [state])
-
-  const removeImage = () => {
-    setImage(null);
-    setImagePreview(null);
-  };
-
-  const handleSubmit =  async () => {
-    if(!image){
-      return setErrors({image : "Upload an Image of your blog"})
-    }
-    
-    const {success, error, data} = BlogSchema.safeParse({title, desc})
-    if(!success){
-      return setErrors(flattenError(error).fieldErrors)
-    }
-
-    formAction({...data, blogImg: image})
-    return ;
+    setErrors({});
+    formAction({ ...parsed.data, blogImg: image });
   };
 
   const isFormValid = title.trim() && desc.trim() && image;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-3 sm:px-6">
+      <div className="mx-auto max-w-2xl">
+        <div className="rounded-2xl bg-white shadow-lg">
           {/* Header */}
-          <div className="px-8 py-6">
-            <h1 className="text-3xl font-bold text-gray-800">Create New Blog Post</h1>
-            <p className="text-gray-600 mt-2">Share your thoughts with the world</p>
+          <div className="border-b px-5 sm:px-8 py-5">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-800">
+              Create Blog
+            </h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Write something worth reading ✨
+            </p>
           </div>
 
           {/* Form */}
-          <form action={handleSubmit} className="p-8 space-y-6" noValidate>
-            {/* Title Field */}
+          <form action={handleSubmit} className="space-y-6 px-5 sm:px-8 py-6" noValidate>
+            {/* Title */}
             <div>
-              <label htmlFor="title" className="block text-sm font-semibold text-gray-700 mb-2">
+              <label className="mb-1 block text-sm font-medium text-gray-700">
                 Title
               </label>
               <input
-                type="text"
-                id="title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter your blog title..."
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none text-gray-800"
+                placeholder="How I learned Next.js"
+                className="w-full rounded-lg border px-4 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
-              <p className='text-xs text-red-700 ml-2'>{errors?.title}</p>
+              {errors?.title && (
+                <p className="mt-1 text-xs text-red-600">{errors.title}</p>
+              )}
             </div>
 
-            {/* desc Field */}
+            {/* Description */}
             <div>
-              <label htmlFor="desc" className="block text-sm font-semibold text-gray-700 mb-2">
-                desc
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Content
               </label>
               <textarea
-                id="desc"
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
-                placeholder="Write your blog content here..."
-                rows="8"
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all outline-none text-gray-800 resize-none"
+                rows={7}
+                placeholder="Write your blog content here…"
+                className="w-full resize-none rounded-lg border px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
               />
-              <p className='text-xs text-red-700 ml-2'>{errors?.desc}</p>
+              {errors?.desc && (
+                <p className="mt-1 text-xs text-red-600">{errors.desc}</p>
+              )}
             </div>
 
             {/* Image Upload */}
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Featured Image
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Cover Image
               </label>
-              
+
               {!imagePreview ? (
-                <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-purple-50 transition-all">
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <Upload className="w-12 h-12 text-gray-400 mb-3" />
-                    <p className="mb-2 text-sm text-gray-600 font-semibold">
-                      Click to upload image
-                    </p>
-                    <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
-                  </div>
+                <label className="flex h-48 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 text-center transition hover:border-blue-500 hover:bg-blue-50">
+                  <Upload className="mb-2 h-8 w-8 text-gray-400" />
+                  <p className="text-sm font-medium text-gray-600">
+                    Click to upload
+                  </p>
+                  <p className="text-xs text-gray-400">PNG / JPG</p>
                   <input
                     type="file"
-                    className="hidden"
                     accept="image/*"
                     onChange={handleImageChange}
+                    className="hidden"
                   />
-                  <p className='text-xs text-red-700 ml-2'>{errors?.image}</p>
                 </label>
               ) : (
-                <div className="relative w-full h-64 border-2 border-gray-200 rounded-lg overflow-hidden">
+                <div className="relative h-48 overflow-hidden rounded-xl border">
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                   <button
                     type="button"
-                    onClick={removeImage}
-                    className="absolute top-3 right-3 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg"
+                    onClick={() => {
+                      setImage(null);
+                      setImagePreview(null);
+                    }}
+                    className="absolute right-2 top-2 rounded-full bg-black/60 p-1.5 text-white hover:bg-black"
                   >
-                    <X className="w-5 h-5" />
+                    <X size={16} />
                   </button>
                 </div>
               )}
+
+              {errors?.image && (
+                <p className="mt-1 text-xs text-red-600">{errors.image}</p>
+              )}
             </div>
 
-            {/* Submit Button */}
-            <div className="pt-4">
-              <button
-                type="submit"
-                disabled={!isFormValid || isPending}
-                className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 ${
-                  isFormValid  
-                    ? `bg-blue-600  shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 ${isPending? "cursor-not-allowed bg-gray-300" : null }`
-                    : 'disabled:bg-gray-300 disabled:cursor-not-allowed'
-                }`}
-              >
-                {!isPending? (
-                  <span>Send</span>
-                ) : (
-                  <span>Uploading...</span>
-                )}
-              </button>
-            </div>
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={!isFormValid || isPending}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white transition disabled:cursor-not-allowed disabled:bg-gray-300"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" /> Uploading…
+                </>
+              ) : (
+                "Publish Blog"
+              )}
+            </button>
           </form>
-        </div>        
+        </div>
       </div>
     </div>
   );
